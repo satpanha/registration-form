@@ -1,14 +1,15 @@
-import { FormData, FormErrors } from '@/types'
+import { FormData, FormErrors, OnFieldChange, RegistrationType } from '@/types'
 import { FormInput, FormSelect, SectionHeader } from '@/components/common'
 import { POSITIONS } from '@/lib/constants'
 
 interface PersonalInfoSectionProps {
   formData: FormData
-  handleChange: (field: keyof FormData, value: string) => void
+  handleChange: OnFieldChange
   errors: FormErrors
+  registrationType: RegistrationType
 }
 
-export function PersonalInfoSection({ formData, handleChange, errors }: PersonalInfoSectionProps) {
+export function PersonalInfoSection({ formData, handleChange, errors, registrationType }: PersonalInfoSectionProps) {
   return (
     <section className="pb-6 border-b border-border">
       <SectionHeader title="Personal Information" description="Please enter your details. All fields are required." />
@@ -33,11 +34,12 @@ export function PersonalInfoSection({ formData, handleChange, errors }: Personal
           />
           <FormSelect
             label="Position"
-            value={formData.position}
+            value={formData.position || ''}
             onChange={(value) => handleChange('position', value)}
             options={POSITIONS}
             required
             error={errors.position}
+            disabled={registrationType === 'player'}
           />
         </div>
 

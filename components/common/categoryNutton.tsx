@@ -1,13 +1,13 @@
 import { cn } from '@/lib/utils'
 
 interface CategoryButtonProps {
-  icon: string
+  // icon: string
   name: string
   isSelected: boolean
   onClick: () => void
 }
 
-export function CategoryButton({ icon, name, isSelected, onClick }: CategoryButtonProps) {
+export function CategoryButton({  name, isSelected, onClick }: CategoryButtonProps) {
   return (
     <button
       type="button"
@@ -17,7 +17,7 @@ export function CategoryButton({ icon, name, isSelected, onClick }: CategoryButt
         isSelected ? 'border-primary bg-primary/5' : 'border-border bg-background hover:border-primary/50'
       )}
     >
-      <div className="text-2xl mb-2">{icon}</div>
+      {/* <div className="text-2xl mb-2">{icon}</div> */}
       <p className="text-xs font-medium text-foreground whitespace-pre-line leading-tight">{name}</p>
     </button>
   )

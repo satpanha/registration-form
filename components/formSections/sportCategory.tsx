@@ -1,26 +1,26 @@
-import { FormData, FormErrors } from '@/types'
+import { FormData, FormErrors, OnFieldChange } from '@/types'
 import { FormSelect, SectionHeader, CategoryButton } from '@/components/common'
-import { SPORT_CATEGORIES, SPORTS, sportsByCategory } from '@/lib/constants'
+import { SPORT_CATEGORIES, SPORTS } from '@/lib/constants'
 
 interface SportCategorySectionProps {
   formData: FormData
-  handleChange: (field: keyof FormData, value: any) => void
+  handleChange: OnFieldChange
   errors?: FormErrors
 }
 
 export function SportCategorySection({ formData, handleChange, errors }: SportCategorySectionProps) {
   const filteredSports = formData.typeOfSport
-    ? sportsByCategory[formData.typeOfSport]?.map((sport) => ({
-        value: sport.toLowerCase().replace(/\s+/g, '-'),
-        label: sport,
-      })) || []
-    : SPORTS
+    ? SPORTS.filter((sport) => sport.category === formData.typeOfSport).map(sport => ({
+        value: sport.value,
+        label: sport.label
+      }))
+    : []
 
   return (
     <section className="pb-6 border-b border-border">
       <SectionHeader
         title="Sport Category"
-        description="Choose a category, then pick a specific sport"
+        description="Select a sport category"
       />
 
       {/* Category Buttons */}
@@ -28,10 +28,13 @@ export function SportCategorySection({ formData, handleChange, errors }: SportCa
         {SPORT_CATEGORIES.map((category) => (
           <CategoryButton
             key={category.id}
-            icon={category.icon}
+            // icon={category.icon}
             name={category.name}
             isSelected={formData.typeOfSport === category.name}
-            onClick={() => handleChange('typeOfSport', category.name)}
+            onClick={() => {
+              handleChange('typeOfSport', category.name)
+              handleChange('selectedSport', null) // Clear selected sport when category changes
+            }}
           />
         ))}
       </div>
@@ -48,3 +51,4 @@ export function SportCategorySection({ formData, handleChange, errors }: SportCa
     </section>
   )
 }
+

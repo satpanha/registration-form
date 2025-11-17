@@ -1,15 +1,19 @@
 'use client'
 
 import { useState } from 'react'
-import { LocationEventSection } from './form-sections/location-event'
-import { SportCategorySection } from './form-sections/sport-category'
-import { PersonalInfoSection } from './form-sections/personal-info'
-import { PhotoUploadSection } from './form-sections/photo-upload'
-import { FormActions } from './form-sections/form-actions'
-import { FormData, FormErrors } from '@/types'
+import { LocationEventSection } from './formSections/locationEvent'
+import { SportCategorySection } from './formSections/sportCategory'
+import { PersonalInfoSection } from './formSections/personalInfo'
+import { PhotoUploadSection } from './formSections/photoUpload'
+import { FormActions } from './formSections/formActions'
+import { FormData, FormErrors, RegistrationType } from '@/types'
 import { validateForm } from '@/lib/validators'
 
-export default function RegistrationForm() {
+interface RegistrationFormProps {
+  registrationType: RegistrationType
+}
+
+export default function RegistrationForm({ registrationType }: RegistrationFormProps) {
   const [formData, setFormData] = useState<FormData>({
     province: null,
     department: null,
@@ -20,7 +24,7 @@ export default function RegistrationForm() {
     lastName: '',
     nationalID: '',
     dateOfBirth: '',
-    position: '',
+    position: registrationType === 'player' ? 'player' : '',
     phoneNumber: '',
     photoUpload: null,
   })
@@ -31,16 +35,18 @@ export default function RegistrationForm() {
   const handleChange = (field: keyof FormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }))
     // Clear error for this field when user starts typing
-    if (errors[field]) {
+    if (field in errors){
       setErrors((prev) => ({ ...prev, [field]: undefined }))
     }
   }
 
+
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const newErrors = validateForm(formData, 'player')
+    const newErrors = validateForm(formData, registrationType)
     setErrors(newErrors)
-    
+
     if (Object.keys(newErrors).length === 0) {
       setSubmitted(true)
       console.log('Form submitted successfully:', formData)
@@ -59,7 +65,7 @@ export default function RegistrationForm() {
       lastName: '',
       nationalID: '',
       dateOfBirth: '',
-      position: '',
+      position: registrationType === 'player' ? 'player' : '',
       phoneNumber: '',
       photoUpload: null,
     })
@@ -71,8 +77,10 @@ export default function RegistrationForm() {
     <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
       <div className="bg-card rounded-2xl shadow-lg p-8 md:p-12 border border-border">
         <div className="mb-10">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">Player Registration Form</h1>
-          <p className="text-muted-foreground">Complete all required fields to register for sports programs</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
+            Registration Form
+          </h1>
+          <p className="text-muted-foreground">Please fill out the form below to register for sports programs and events.</p>
         </div>
 
         {submitted && (
@@ -84,7 +92,7 @@ export default function RegistrationForm() {
         <form onSubmit={handleSubmit} className="space-y-10">
           <LocationEventSection formData={formData} handleChange={handleChange} errors={errors} />
           <SportCategorySection formData={formData} handleChange={handleChange} errors={errors} />
-          <PersonalInfoSection formData={formData} handleChange={handleChange} errors={errors} />
+          <PersonalInfoSection formData={formData} handleChange={handleChange} errors={errors} registrationType={registrationType} />
           <PhotoUploadSection formData={formData} handleChange={handleChange} errors={errors} />
           <FormActions handleReset={handleReset} />
         </form>

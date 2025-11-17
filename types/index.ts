@@ -1,3 +1,4 @@
+import React from 'react'
 export interface FormData {
   province: string | null
   department: string | null
@@ -8,11 +9,13 @@ export interface FormData {
   lastName: string
   nationalID: string
   dateOfBirth: string
-  position: string
+  position: string | null
   phoneNumber: string
   photoUpload: File | null
   category?: string | null
 }
+
+export type RegistrationType = 'leader' | 'player'
 
 export interface FormErrors {
   province?: string
@@ -49,6 +52,7 @@ export interface HeaderButtonProps {
   variant?: 'primary' | 'outline'
   onClick?: () => void
   children: React.ReactNode
+  className?: string
 }
 
 export interface FormSectionProps {
@@ -67,6 +71,12 @@ export interface FormInputProps {
   error?: string
 }
 
-export interface FormSelectProps extends FormInputProps {
+export interface FormSelectProps {
+  label: string
+  value: string | null
+  onChange: (value: string | null) => void
   options: SelectOption[]
+  required?: boolean
+  error?: string
+  disabled?: boolean
 }

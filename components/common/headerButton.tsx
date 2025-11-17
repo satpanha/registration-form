@@ -1,7 +1,7 @@
 import { HeaderButtonProps } from '@/types'
 import { cn } from '@/lib/utils'
 
-export function HeaderButton({ variant = 'outline', onClick, children }: HeaderButtonProps) {
+export function HeaderButton({ variant = 'outline', onClick, children, className }: HeaderButtonProps) {
   const baseStyles = 'px-4 py-2 text-sm font-medium rounded-lg transition'
 
   const variantStyles = {
@@ -10,7 +10,7 @@ export function HeaderButton({ variant = 'outline', onClick, children }: HeaderB
   }
 
   return (
-    <button className={cn(baseStyles, variantStyles[variant])} onClick={onClick}>
+    <button className={cn(baseStyles, variantStyles[variant], className)} onClick={onClick}>
       {children}
     </button>
   )

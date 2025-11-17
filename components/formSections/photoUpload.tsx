@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { FormData, FormErrors } from '@/types'
+import { FormData, FormErrors, OnFieldChange } from '@/types'
 import { SectionHeader } from '@/components/common'
 
 interface PhotoUploadSectionProps {
   formData: FormData
-  handleChange: (field: keyof FormData, value: File | null) => void
+  handleChange: OnFieldChange
   errors: FormErrors
 }
 
@@ -41,7 +41,7 @@ export function PhotoUploadSection({ formData, handleChange, errors }: PhotoUplo
 
   return (
     <section className="pb-6 border-b border-border">
-      <SectionHeader title="Upload Photo" description="Add a profile photo (optional)" />
+      <SectionHeader title="Photo Upload" description="Add a profile photo (optional)" />
 
       <div
         onDragEnter={handleDrag}
@@ -57,8 +57,8 @@ export function PhotoUploadSection({ formData, handleChange, errors }: PhotoUplo
             <span className="text-3xl">📸</span>
           </div>
         </div>
-        <p className="text-foreground font-medium mb-1">Click to upload or drag and drop</p>
-        <p className="text-sm text-muted-foreground mb-4">PNG, JPG up to 2MB</p>
+        <p className="text-foreground font-medium mb-1">Drag and drop your photo here, or click to select</p>
+        <p className="text-sm text-muted-foreground mb-4">Supported formats: JPG, PNG, GIF (max 5MB)</p>
         <input 
           type="file" 
           accept="image/*" 

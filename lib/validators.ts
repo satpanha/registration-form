@@ -1,5 +1,5 @@
 import type { FormData, FormErrors } from '@/types'
-import { sportsByCategory } from './constants'
+import { PROVINCES, DEPARTMENTS, EVENT_TYPES, POSITIONS, SPORTS } from './constants'
 
 const phoneRegex = /^\+?[0-9\s\-()]{7,15}$/
 const numericRegex = /^[0-9]+$/
@@ -13,6 +13,8 @@ export function validateForm(
   // Event Type validation
   if (!data.eventType) {
     errors.eventType = 'Please select the event type.'
+  } else if (!EVENT_TYPES.some(et => et.value === data.eventType)) {
+    errors.eventType = 'Please select a valid event type.'
   }
 
   // First & Last Name validation
@@ -33,6 +35,8 @@ export function validateForm(
       errors.position = 'Please choose your position level.'
     } else if (data.position === 'player') {
       errors.position = 'Coaches and leaders cannot select Player as position.'
+    } else if (!POSITIONS.some(pos => pos.value === data.position)) {
+      errors.position = 'Please select a valid position.'
     }
   }
 
@@ -43,6 +47,10 @@ export function validateForm(
   } else if (data.province && data.department) {
     errors.province = 'You can only choose one.'
     errors.department = 'You can only choose one.'
+  } else if (data.province && !PROVINCES.some(p => p.value === data.province)) {
+    errors.province = 'Please select a valid province.'
+  } else if (data.department && !DEPARTMENTS.some(d => d.value === data.department)) {
+    errors.department = 'Please select a valid department.'
   }
 
   // National ID: numeric, reasonable length
@@ -85,7 +93,7 @@ export function validateForm(
     data.typeOfSport &&
     data.selectedSport &&
     data.selectedSport.trim() !== '' &&
-    !sportsByCategory[data.typeOfSport as string]?.includes(data.selectedSport as string)
+    !SPORTS.some(sport => sport.value === data.selectedSport && sport.category === data.typeOfSport)
   ) {
     errors.selectedSport = 'Selected sport does not match the chosen category.'
   }

@@ -1,10 +1,10 @@
-import { FormData, FormErrors } from '@/types'
+import { FormData, FormErrors, OnFieldChange } from '@/types'
 import { FormSelect, SectionHeader } from '@/components/common'
 import { PROVINCES, DEPARTMENTS, EVENT_TYPES } from '@/lib/constants'
 
 interface LocationEventSectionProps {
   formData: FormData
-  handleChange: (field: keyof FormData, value: string) => void
+  handleChange: OnFieldChange
   errors: FormErrors
 }
 
@@ -19,23 +19,31 @@ export function LocationEventSection({ formData, handleChange, errors }: Locatio
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <FormSelect
           label="Province"
-          value={formData.province}
-          onChange={(value) => handleChange('province', value)}
+          value={formData.province || ''}
+          onChange={(value) => {
+            handleChange('province', value)
+            if (value) handleChange('department', null) // Clear department when province is selected
+          }}
           options={PROVINCES}
           required
           error={errors.province}
+          disabled={!!formData.department} // Disable if department is selected
         />
         <FormSelect
           label="Department"
-          value={formData.department}
-          onChange={(value) => handleChange('department', value)}
+          value={formData.department || ''}
+          onChange={(value) => {
+            handleChange('department', value)
+            if (value) handleChange('province', null) // Clear province when department is selected
+          }}
           options={DEPARTMENTS}
           required
           error={errors.department}
+          disabled={!!formData.province} // Disable if province is selected
         />
         <FormSelect
-          label="Type of Event"
-          value={formData.eventType}
+          label="Event Type"
+          value={formData.eventType || ''}
           onChange={(value) => handleChange('eventType', value)}
           options={EVENT_TYPES}
           required
